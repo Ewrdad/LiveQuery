@@ -2,9 +2,30 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 
-export const Editor = ({ Selected, setSelected, Questions }) => {
+export const Editor = ({
+  Selected,
+  setSelected,
+  Questions,
+  Server,
+  SessionCode,
+}) => {
   return (
     <div className="w-full h-full min-w-max ">
+      <Button
+        className=" w-full  min-w-max "
+        disabled={Selected.question.active}
+        onClick={() => {
+          console.log(SessionCode);
+          Server.emit("MakeActive", {
+            SessionID: SessionCode,
+            Question: Selected.question,
+            index: Selected.index,
+          });
+          Server.emit("GetAllQuestion", { sessionID: SessionCode });
+        }}
+      >
+        Make active
+      </Button>
       <Button
         className=" w-full  min-w-max "
         disabled={
@@ -65,7 +86,22 @@ export const Editor = ({ Selected, setSelected, Questions }) => {
         </div>
       ))}
 
-      <Button>Add Option</Button>
+      <Button
+        onClick={() => {
+          setSelected((previousValue) => ({
+            ...previousValue,
+            question: {
+              ...previousValue.question,
+              options: [
+                ...previousValue.question.options,
+                { text: "New Option", votes: 0 },
+              ],
+            },
+          }));
+        }}
+      >
+        Add Option
+      </Button>
     </div>
   );
 };

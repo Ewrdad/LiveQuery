@@ -1,6 +1,6 @@
 import { Vote } from "./components/Vote";
 import { Results } from "./components/Results";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -13,9 +13,8 @@ import {
  * @returns Player component
  * @example <Player />
  */
-export const Player = () => {
+export const Player = ({ Server, SessionCode }) => {
   const [showResults, setShowResults] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [options, setOptions] = useState([
     {
       text: "Option 1",
@@ -26,7 +25,18 @@ export const Player = () => {
       votes: 2,
     },
   ]);
+  const [QuestionText, setQuestionText] = useState("Q1");
   const [players, setPlayers] = useState(10);
+
+  const updateQuestion = (question) => {
+    setOptions(question.options);
+    setQuestionText(question.text);
+  };
+
+  useEffect(() => {
+    Server.on("Question", updateQuestion);
+    Server.emit("GetQuestion", { sessionID: SessionCode });
+  }, [Server, SessionCode]);
 
   return (
     <>
@@ -35,10 +45,7 @@ export const Player = () => {
           {
             // MARK: Header
           }
-          <h4 className="h-full p-6 text-2xl">
-            {" "}
-            QUESTION 1: What points shall this get{" "}
-          </h4>
+          <h4 className="h-full p-6 text-2xl"> {QuestionText} </h4>
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={75}>

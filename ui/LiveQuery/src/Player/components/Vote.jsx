@@ -1,4 +1,4 @@
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 export const Vote = ({ options, setShowResults }) => {
@@ -17,7 +17,7 @@ export const Vote = ({ options, setShowResults }) => {
             >
               <div className="w-1/3"></div>
               {option.text}
-              tdrfyguhjko
+
               <div className="w-1/3"></div>
             </Button>
           </div>

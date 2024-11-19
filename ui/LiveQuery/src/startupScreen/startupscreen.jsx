@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 /**
  * MARK: StartUpScreen
@@ -9,19 +10,49 @@ import { useNavigate } from "react-router-dom";
  * @returns {JSX.Element} StartUpScreen component
  * @example <StartUpScreen />
  */
-export const StartUpScreen = () => {
+export const StartUpScreen = ({ Server, setSessionCode }) => {
   const navigate = useNavigate();
+  const [RoomCode, setRoomCode] = useState("");
+
+  useEffect(() => {
+    Server.on("SuccessJoined", (message) => {
+      if (message.status == 200) {
+        navigate("/player");
+        setSessionCode(message.sessionID);
+      }
+    });
+    Server.on("SeshCreated", (message) => {
+      if (message.status == 200) {
+        console.log(message);
+        navigate("/dashboard");
+        setSessionCode(message.sessionID);
+      }
+    });
+
+    return () => {
+      Server.off("SuccessJoined");
+      Server.off("SeshCreated");
+    };
+  }, []);
+
   return (
     <Card className="w-full p-3 border-3-black shadow-md bg-slate-200 ">
       <CardContent>
         <br />
 
-        <Input placeholder="Session ID" className="w-full bg-white shadow-lg" />
+        <Input
+          placeholder="Session ID"
+          value={RoomCode}
+          onChange={(e) => {
+            setRoomCode(e.target.value);
+          }}
+          className="w-full bg-white shadow-lg"
+        />
         <br />
         <Button
           className="w-full shadow-lg bg-slate-500"
           onClick={() => {
-            navigate("/player");
+            Server.emit("JoinSession", { sessionID: RoomCode });
           }}
         >
           Join Session
@@ -34,7 +65,10 @@ export const StartUpScreen = () => {
         <Button
           className="w-full shadow-lg "
           onClick={() => {
-            navigate("/dashboard");
+            const SeshID = Math.floor(Math.random() * 1000000);
+            Server.emit("CreateSesh", { user: "admin", seshID: SeshID });
+
+            // navigate("/dashboard");
           }}
         >
           Create Session

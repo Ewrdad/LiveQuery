@@ -5,7 +5,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NewQuestion } from "./QuestionSelector/NewQuestion";
 import { ExistingQuestion } from "./QuestionSelector/ExistingQuestion";
 import { QuestionEditor } from "./QuestionEditor/QuestionEditor";
@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
  * @returns {JSX.Element} SessionMaster component
  * @example <SessionMaster />
  */
-export const SessionMaster = () => {
+export const SessionMaster = ({ SessionCode, Server }) => {
   const [Questions, setQuestions] = useState([
     {
       text: "Question 1",
@@ -42,10 +42,21 @@ export const SessionMaster = () => {
     question: Questions[0],
   });
 
+  Server.on("AllQuestions", (message) => {
+    console.log(message);
+    if (message.sessionID === SessionCode) {
+      setQuestions(message.questions);
+    }
+  });
+
+  useEffect(() => {
+    Server.emit("GetAllQuestion", { sessionID: SessionCode });
+  }, [Server, SessionCode]);
+
   return (
     <div className="w-screen h-screen min-w-max min-h-max align-left left-0 fixed top-0">
       <div className="bg-slate-500 w-full ">
-        <p>Session Code: #329329</p>
+        <p>Session Code: #{SessionCode}</p>
         <Button className="m-1">Export results</Button>
       </div>
       <ResizablePanelGroup
@@ -70,6 +81,8 @@ export const SessionMaster = () => {
             Selected={Selected}
             setSelected={setSelected}
             Questions={Questions}
+            Server={Server}
+            SessionCode={SessionCode}
           />
         </ResizablePanel>
       </ResizablePanelGroup>
