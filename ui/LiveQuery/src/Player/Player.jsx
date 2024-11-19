@@ -15,56 +15,59 @@ import {
  */
 export const Player = () => {
   const [showResults, setShowResults] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [options, setOptions] = useState([
     {
       text: "Option 1",
-      votes: 0,
+      votes: 5,
     },
     {
       text: "Option 2",
-      votes: 0,
+      votes: 2,
     },
   ]);
+  const [players, setPlayers] = useState(10);
 
   return (
-    <ResizablePanelGroup
-      direction="vertical"
-      className="bg-orange-500 h-full w-full"
-    >
-      <ResizablePanel className="text-center text-2xl bg-green-800">
-        {
-          // MARK: Header
-        }
-        <h4> QUESTION 1: What points shall this get </h4>
-      </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel>
-        {
-          // MARK: Body
-        }
-        <div>
-          {/* {showResults ? (
-            <Results options={options} />
-          ) : (
-            <Vote options={options} setShowResults={setShowResults} />
-          )} */}
-          sss
-        </div>
-      </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel className="bg-red-950">
-        {
-          // MARK: Footer
-        }
-        <div className="w-full p-4 bg-slate-300 text-center flex">
-          <div className="w-1/2 ">
-            <p>Players</p>
+    <>
+      <ResizablePanelGroup direction="vertical" className="min-h-screen">
+        <ResizablePanel defaultSize={25}>
+          {
+            // MARK: Header
+          }
+          <h4 className="h-full p-6 text-2xl">
+            {" "}
+            QUESTION 1: What points shall this get{" "}
+          </h4>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={75}>
+          {
+            // MARK: Body
+          }
+          <div>
+            {showResults ? (
+              <Results options={options} players={players} />
+            ) : (
+              <Vote options={options} setShowResults={setShowResults} />
+            )}
           </div>
-          <div className="w-1/2">
-            <p>#28383</p>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={25}>
+          {
+            // MARK: Footer
+          }
+          <div className="w-full p-4 bg-slate-300 text-center flex">
+            <div className="w-1/2 ">
+              <p>Players</p>
+            </div>
+            <div className="w-1/2">
+              <p>#28383</p>
+            </div>
           </div>
-        </div>
-      </ResizablePanel>
-    </ResizablePanelGroup>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </>
   );
 };
