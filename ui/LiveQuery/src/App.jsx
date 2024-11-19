@@ -18,7 +18,7 @@ import { useState } from "react";
  */
 function App() {
   const [SessionCode, setSessionCode] = useState("");
-  const Server = io("http://localhost:3001");
+  const Server = io("ws://localhost:3001");
 
   Server.on("connect", () => {
     console.log("Connected to server");
