@@ -22,6 +22,10 @@ export const Editor = ({
             index: Selected.index,
           });
           Server.emit("GetAllQuestion", { sessionID: SessionCode });
+          setSelected((previousValue) => ({
+            ...previousValue,
+            question: { ...previousValue.question, active: true },
+          }));
         }}
       >
         Make active

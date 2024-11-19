@@ -28,14 +28,21 @@ export const Player = ({ Server, SessionCode }) => {
   const [QuestionText, setQuestionText] = useState("Q1");
   const [players, setPlayers] = useState(10);
 
-  const updateQuestion = (question) => {
-    setOptions(question.options);
-    setQuestionText(question.text);
-  };
-
   useEffect(() => {
+    const updateQuestion = (question) => {
+      console.log("Updated questions to ", question, SessionCode);
+      setOptions(question.options);
+      setQuestionText(question.text);
+    };
+
     Server.on("Question", updateQuestion);
+    Server.on("QuestionUpdate", updateQuestion);
+
     Server.emit("GetQuestion", { sessionID: SessionCode });
+
+    return () => {
+      Server.off("Question", updateQuestion);
+    };
   }, [Server, SessionCode]);
 
   return (
@@ -45,7 +52,15 @@ export const Player = ({ Server, SessionCode }) => {
           {
             // MARK: Header
           }
-          <h4 className="h-full p-6 text-2xl"> {QuestionText} </h4>
+          <h4
+            className="h-full p-6 text-2xl"
+            onClick={() => {
+              Server.emit("GetQuestion", { sessionID: SessionCode });
+            }}
+          >
+            {" "}
+            {QuestionText}{" "}
+          </h4>
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={75}>

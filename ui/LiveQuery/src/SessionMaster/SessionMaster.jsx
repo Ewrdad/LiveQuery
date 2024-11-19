@@ -42,14 +42,22 @@ export const SessionMaster = ({ SessionCode, Server }) => {
     question: Questions[0],
   });
 
-  Server.on("AllQuestions", (message) => {
-    console.log(message);
-    if (message.sessionID === SessionCode) {
-      setQuestions(message.questions);
-    }
-  });
-
   useEffect(() => {
+    Server.on("Question", (message) => console.log(message));
+
+    Server.on("AllQuestions", (message) => {
+      console.log(message);
+      if (message.sessionID === SessionCode) {
+        setQuestions(message.questions);
+      }
+    });
+
+    Server.on("Update", (message) => {
+      console.log("Update", message);
+      Server.emit("GetQuestion", { sessionID: SessionCode });
+    });
+    Server.emit("GetQuestion", { sessionID: SessionCode });
+
     Server.emit("GetAllQuestion", { sessionID: SessionCode });
   }, [Server, SessionCode]);
 

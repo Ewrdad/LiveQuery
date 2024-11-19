@@ -15,11 +15,11 @@ export const StartUpScreen = ({ Server, setSessionCode }) => {
   const [RoomCode, setRoomCode] = useState("");
 
   useEffect(() => {
-    Server.on("SuccessJoined", (message) => {
+    Server.on("SuccessJoined", async (message) => {
       if (message.status == 200) {
         console.log(message);
+        await setSessionCode(message.sessionID);
         navigate("/player");
-        setSessionCode(message.sessionID);
       }
     });
 
@@ -54,7 +54,6 @@ export const StartUpScreen = ({ Server, setSessionCode }) => {
         <Button
           className="w-full shadow-lg bg-slate-500"
           onClick={() => {
-            console.log(RoomCode);
             Server.emit("JoinSession", { sessionID: RoomCode });
           }}
         >
