@@ -158,6 +158,24 @@ io.on("connection", (socket) => {
       console.error(e);
     }
   });
+
+  socket.on("ReplaceQuestion", (message) => {
+    try {
+      if (session[`${message.sessionID}`] === undefined) {
+        throw new Error("Session not found");
+      }
+
+      console.log("ReplaceQuestion", message);
+      session[`${message.sessionID}`].questions[message.index] =
+        message.question;
+      console.log("Question Updated", session[`${message.sessionID}`]);
+      socket
+        .to(`${message.sessionID}`)
+        .emit("Update", session[`${message.sessionID}`]);
+    } catch (e) {
+      console.error(e);
+    }
+  });
 });
 
 http.listen(3002, () => console.log("listening on http://localhost:3001"));

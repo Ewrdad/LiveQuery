@@ -36,6 +36,15 @@ export const Editor = ({
           JSON.stringify(Questions[Selected.index]) ===
           JSON.stringify(Selected.question)
         }
+        onClick={() => {
+          console.log("Update Sent", Selected);
+          Server.emit("ReplaceQuestion", {
+            sessionID: SessionCode,
+            question: Selected.question,
+            index: Selected.index,
+          });
+          Server.emit("GetAllQuestion", { sessionID: SessionCode });
+        }}
       >
         Update
       </Button>
@@ -44,7 +53,7 @@ export const Editor = ({
         onChange={(event) => {
           setSelected((previousValue) => ({
             ...previousValue,
-            question: { ...previousValue.question, text: event.value },
+            question: { ...previousValue.question, text: event.target.value },
           }));
         }}
       />

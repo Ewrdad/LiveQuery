@@ -80,6 +80,7 @@ export const SessionMaster = ({ SessionCode, Server }) => {
     Server.emit("GetQuestion", { sessionID: SessionCode });
 
     Server.emit("GetAllQuestion", { sessionID: SessionCode });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Server, SessionCode]);
 
   return (
@@ -93,7 +94,11 @@ export const SessionMaster = ({ SessionCode, Server }) => {
         direction="horizontal"
       >
         <ResizablePanel className="bg-slate-300" defaultSize={20}>
-          <NewQuestion setQuestions={setQuestions} />
+          <NewQuestion
+            Server={Server}
+            Questions={Questions}
+            SessionCode={SessionCode}
+          />
           {Questions.map((Question, index) => (
             <ExistingQuestion
               key={index}
@@ -115,9 +120,6 @@ export const SessionMaster = ({ SessionCode, Server }) => {
           />
         </ResizablePanel>
       </ResizablePanelGroup>
-      <div className="bg-slate-500 w-full ">
-        <p>Test</p>
-      </div>
     </div>
   );
 };
