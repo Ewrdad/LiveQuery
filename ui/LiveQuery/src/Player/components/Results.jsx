@@ -1,5 +1,16 @@
 import { Progress } from "@/components/ui/progress";
 
+/**
+ * MARK: Results
+ * @description Displays the results of the current poll
+ * @param {Object} options The options for the poll
+ * @param {Number} players The number of players in the session
+ * @returns {JSX.Element} Results component
+ * @example <Results options={options} players={players} />
+ *
+ *
+ *
+ */
 export const Results = ({ options, players }) => {
   return (
     <div>

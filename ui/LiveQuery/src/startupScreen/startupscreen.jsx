@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
  * @example <StartUpScreen />
  * @param {Object} Server The socket.io server connection
  * @param {Function} setSessionCode The function to set the session code
+ *
  * @listens SuccessJoined sets session code and navigates to Player screen
  * @listens SeshCreated sets session code and navigates to Dashboard screen
  * @emits JoinSession emits a request to join a session

@@ -16,6 +16,7 @@ import { useState } from "react";
  * @description The main app component for the application
  * @returns {JSX.Element} App component
  * @example <App />
+ *
  * @listens connect Emits a welcome message to the server
  * @listens UserJoined Logs a message when a user joins the session
  * @emit Welcome Emits a welcome message to the server

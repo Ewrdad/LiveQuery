@@ -12,8 +12,19 @@ import {
  * @description This is the main screen for the player
  * @returns Player component
  * @example <Player />
+ *
+ * @param {Object} Server The socket.io server connection
+ * @param {String} SessionCode The session code
+ *
+ * @listens Update Triggers a session update
+ * @listens Question Triggers a question update
+ * @listens QuestionUpdate Triggers a question update
+ * @emits GetQuestion Emits a request to get the current question
+ * @emits GetAllQuestion Emits a request to get all questions(Mainly to force dashboard to update)
+ *
  */
 export const Player = ({ Server, SessionCode }) => {
+  //MARK: useState
   const [showResults, setShowResults] = useState(false);
   const [options, setOptions] = useState([
     {
@@ -28,6 +39,7 @@ export const Player = ({ Server, SessionCode }) => {
   const [QuestionText, setQuestionText] = useState("Q1");
   const [players, setPlayers] = useState(10);
 
+  //MARK: useEffect
   useEffect(() => {
     Server.on("Update", (message) => {
       console.log("Update", message);
@@ -36,6 +48,7 @@ export const Player = ({ Server, SessionCode }) => {
       Server.emit("GetQuestion", { sessionID: SessionCode });
       Server.emit("GetAllQuestion", { sessionID: SessionCode });
     });
+
     const updateQuestion = async (question) => {
       console.log("Updated questions to ", question, SessionCode);
       setQuestionText(question.text);
@@ -60,6 +73,7 @@ export const Player = ({ Server, SessionCode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Server, SessionCode, showResults]);
 
+  //MARK: return
   return (
     <>
       <ResizablePanelGroup direction="vertical" className="min-h-screen">
