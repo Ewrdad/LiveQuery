@@ -116,14 +116,42 @@ io.on("connection", (socket) => {
   });
 
   socket.on("GetAllQuestion", (message) => {
-    console.log("GetAllQuestions", message);
-    if (session[`${message.sessionID}`] === undefined) {
-      throw new Error("Session not found");
+    try {
+      console.log("GetAllQuestions", message);
+      if (session[`${message.sessionID}`] === undefined) {
+        throw new Error("Session not found");
+      }
+      socket.emit("AllQuestions", {
+        sessionID: `${message.sessionID}`,
+        questions: session[`${message.sessionID}`].questions,
+      });
+    } catch (e) {
+      console.error(e);
     }
-    socket.emit("AllQuestions", {
-      sessionID: `${message.sessionID}`,
-      questions: session[`${message.sessionID}`].questions,
-    });
+  });
+
+  socket.on("Vote", (message) => {
+    try {
+      if (session[`${message.sessionID}`] === undefined) {
+        throw new Error("Session not found");
+      }
+
+      console.log("Vote", message);
+      //Find ID of active question
+      const mes = session[`${message.sessionID}`].questions.findIndex(
+        (question) => question.active
+      );
+
+      session[`${message.sessionID}`].questions[mes].options[
+        message.optionIndex
+      ].votes += 1;
+      console.log("New voted", session[`${message.sessionID}`].questions[mes]);
+      socket
+        .to(`${message.sessionID}`)
+        .emit("Update", session[`${message.sessionID}`].questions);
+    } catch (e) {
+      console.error(e);
+    }
   });
 });
 

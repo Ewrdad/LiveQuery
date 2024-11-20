@@ -29,10 +29,24 @@ export const Player = ({ Server, SessionCode }) => {
   const [players, setPlayers] = useState(10);
 
   useEffect(() => {
+    Server.on("Update", (message) => {
+      console.log("Update", message);
+      Server.emit("GetQuestion", { sessionID: SessionCode });
+      Server.emit("GetAllQuestion", { sessionID: SessionCode });
+    });
     const updateQuestion = (question) => {
       console.log("Updated questions to ", question, SessionCode);
-      setOptions(question.options);
       setQuestionText(question.text);
+
+      const newOps = question.options.map((option) => option.text);
+      const oldOps = options.map((option) => option.text);
+      setOptions(question.options);
+      if (JSON.stringify(newOps) !== JSON.stringify(oldOps) && showResults) {
+        alert(
+          `New Options ${JSON.stringify(newOps)} | ${JSON.stringify(oldOps)}`
+        );
+        setShowResults(false);
+      }
     };
 
     Server.on("Question", updateQuestion);
@@ -71,7 +85,12 @@ export const Player = ({ Server, SessionCode }) => {
             {showResults ? (
               <Results options={options} players={players} />
             ) : (
-              <Vote options={options} setShowResults={setShowResults} />
+              <Vote
+                options={options}
+                setShowResults={setShowResults}
+                Server={Server}
+                SessionCode={SessionCode}
+              />
             )}
           </div>
         </ResizablePanel>

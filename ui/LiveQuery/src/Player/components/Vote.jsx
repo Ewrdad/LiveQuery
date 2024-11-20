@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-export const Vote = ({ options, setShowResults }) => {
+export const Vote = ({ options, setShowResults, Server, SessionCode }) => {
   return (
     <div className="w-full  text-xl">
       {options.map((option, index) => {
@@ -13,7 +13,13 @@ export const Vote = ({ options, setShowResults }) => {
             />
             <Button
               className="w-full shadow-lg bg-slate-500 text-center text-2xl p-10 "
-              onClick={() => setShowResults(true)}
+              onClick={() => {
+                Server.emit("Vote", {
+                  sessionID: SessionCode,
+                  optionIndex: index,
+                });
+                setShowResults(true);
+              }}
             >
               <div className="w-1/3"></div>
               {option.text}

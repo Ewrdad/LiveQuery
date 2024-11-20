@@ -47,15 +47,16 @@ export const SessionMaster = ({ SessionCode, Server }) => {
 
     Server.on("AllQuestions", (message) => {
       console.log(message);
-      if (message.sessionID === SessionCode) {
-        setQuestions(message.questions);
-      }
+
+      setQuestions(message.questions);
     });
 
     Server.on("Update", (message) => {
       console.log("Update", message);
       Server.emit("GetQuestion", { sessionID: SessionCode });
+      Server.emit("GetAllQuestion", { sessionID: SessionCode });
     });
+
     Server.emit("GetQuestion", { sessionID: SessionCode });
 
     Server.emit("GetAllQuestion", { sessionID: SessionCode });
