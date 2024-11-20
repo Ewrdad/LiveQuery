@@ -104,13 +104,9 @@ io.on("connection", (socket) => {
           question.active = true;
         }
       });
-      // console.log(session[message.SessionID].questions);
       const question = session[`${message.SessionID}`].questions.filter(
         (question) => question.active
       )[0];
-      console.log("Get Messagedsadsdxa", message, question);
-
-      socket.emit("Update", question);
     } catch (e) {
       console.error(e);
     }
@@ -150,7 +146,6 @@ io.on("connection", (socket) => {
       session[`${message.sessionID}`].questions[mes].options[
         message.optionIndex
       ].votes += 1;
-      console.log("New voted", session[`${message.sessionID}`].questions[mes]);
       socket
         .to(`${message.sessionID}`)
         .emit("Update", session[`${message.sessionID}`]);
@@ -168,7 +163,6 @@ io.on("connection", (socket) => {
       console.log("ReplaceQuestion", message);
       session[`${message.sessionID}`].questions[message.index] =
         message.question;
-      console.log("Question Updated", session[`${message.sessionID}`]);
       socket
         .to(`${message.sessionID}`)
         .emit("Update", session[`${message.sessionID}`]);
@@ -178,4 +172,4 @@ io.on("connection", (socket) => {
   });
 });
 
-http.listen(3002, () => console.log("listening on http://localhost:3001"));
+http.listen(3002, () => console.log("listening on http://localhost:3002"));

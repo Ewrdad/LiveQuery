@@ -9,13 +9,19 @@ import { useEffect, useState } from "react";
  * @description The statup screen for users. Allows creating a session and joining a session.
  * @returns {JSX.Element} StartUpScreen component
  * @example <StartUpScreen />
+ * @param {Object} Server The socket.io server connection
+ * @param {Function} setSessionCode The function to set the session code
+ * @listens SuccessJoined sets session code and navigates to Player screen
+ * @listens SeshCreated sets session code and navigates to Dashboard screen
+ * @emits JoinSession emits a request to join a session
+ * @emits CreateSesh emits a request to create a session
+ *
  */
 export const StartUpScreen = ({ Server, setSessionCode }) => {
   const navigate = useNavigate();
   const [RoomCode, setRoomCode] = useState("");
 
   useEffect(() => {
-    // setSessionCode("");
     Server.on("SuccessJoined", async (message) => {
       if (message.status == 200) {
         console.log(message);
@@ -65,8 +71,6 @@ export const StartUpScreen = ({ Server, setSessionCode }) => {
           onClick={() => {
             const SeshID = Math.floor(Math.random() * 1000000);
             Server.emit("CreateSesh", { user: "admin", seshID: SeshID });
-
-            // navigate("/dashboard");
           }}
         >
           Create Session
