@@ -36,7 +36,6 @@ export const SessionMaster = ({ SessionCode, Server }) => {
       ],
     },
   ]);
-  const [Players, setPlayers] = useState(10);
   const [Selected, setSelected] = useState({
     index: 0,
     question: Questions[0],
@@ -49,6 +48,28 @@ export const SessionMaster = ({ SessionCode, Server }) => {
       console.log(message);
 
       setQuestions(message.questions);
+
+      //Update votes of options of question in index on selected
+      message.questions[Selected.index].options.forEach((option, index) => {
+        setSelected((prev) => {
+          return {
+            ...prev,
+            question: {
+              ...prev.question,
+              options: prev.question.options.map((option, i) => {
+                if (i === index) {
+                  return {
+                    ...option,
+                    votes:
+                      message.questions[Selected.index].options[index].votes,
+                  };
+                }
+                return option;
+              }),
+            },
+          };
+        });
+      });
     });
 
     Server.on("Update", (message) => {
@@ -56,7 +77,6 @@ export const SessionMaster = ({ SessionCode, Server }) => {
       Server.emit("GetQuestion", { sessionID: SessionCode });
       Server.emit("GetAllQuestion", { sessionID: SessionCode });
     });
-
     Server.emit("GetQuestion", { sessionID: SessionCode });
 
     Server.emit("GetAllQuestion", { sessionID: SessionCode });

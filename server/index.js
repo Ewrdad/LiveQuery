@@ -16,10 +16,12 @@ io.on("connection", (socket) => {
   socket.on("JoinSession", async (message) => {
     try {
       if (session[`${message.sessionID}`] === undefined) {
-        throw new Error("Session not found");
+        throw new Error("Session not found: JoinSession");
       }
       console.log("JoinSession", message);
       socket.join(`${message.sessionID}`);
+      //Increment session player count
+      session[`${message.sessionID}`]["players"] += 1;
       socket
         .to(`${message.sessionID}`)
         .emit(
@@ -42,6 +44,7 @@ io.on("connection", (socket) => {
 
     session[`${sessionID}`] = {
       admin: socket.id,
+      players: 0,
       questions: [
         {
           text: "Question 1",
@@ -70,17 +73,15 @@ io.on("connection", (socket) => {
     try {
       console.log("Get Message", message);
       if (session[`${message.sessionID}`] === undefined) {
-        throw new Error("Session not found");
+        throw new Error("Session not found: GetQuestion");
       }
       socket.join(`${message.sessionID}`);
-      // const question = session[message.sessionID].questions.filter(
-      //   (question) => question.active
-      // )[0];
 
       const question = session[`${message.sessionID}`].questions.filter(
         (question) => question.active
       )[0];
-
+      console.info("returning these", question);
+      question["players"] = session[`${message.sessionID}`].players;
       socket.to(`${message.sessionID}`).emit("Question", question);
       socket.emit("Question", question);
     } catch (e) {
@@ -119,9 +120,13 @@ io.on("connection", (socket) => {
     try {
       console.log("GetAllQuestions", message);
       if (session[`${message.sessionID}`] === undefined) {
-        throw new Error("Session not found");
+        throw new Error("Session not found  : GetAllQuestion");
       }
       socket.emit("AllQuestions", {
+        sessionID: `${message.sessionID}`,
+        questions: session[`${message.sessionID}`].questions,
+      });
+      socket.to(`${message.sessionID}`).emit("AllQuestions", {
         sessionID: `${message.sessionID}`,
         questions: session[`${message.sessionID}`].questions,
       });
@@ -148,7 +153,7 @@ io.on("connection", (socket) => {
       console.log("New voted", session[`${message.sessionID}`].questions[mes]);
       socket
         .to(`${message.sessionID}`)
-        .emit("Update", session[`${message.sessionID}`].questions);
+        .emit("Update", session[`${message.sessionID}`]);
     } catch (e) {
       console.error(e);
     }

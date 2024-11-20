@@ -31,20 +31,20 @@ export const Player = ({ Server, SessionCode }) => {
   useEffect(() => {
     Server.on("Update", (message) => {
       console.log("Update", message);
+      // alert(`Session ${SessionCode} has been updated`);
+      setPlayers(message.players);
       Server.emit("GetQuestion", { sessionID: SessionCode });
       Server.emit("GetAllQuestion", { sessionID: SessionCode });
     });
-    const updateQuestion = (question) => {
+    const updateQuestion = async (question) => {
       console.log("Updated questions to ", question, SessionCode);
       setQuestionText(question.text);
-
+      setPlayers(question.players);
       const newOps = question.options.map((option) => option.text);
       const oldOps = options.map((option) => option.text);
-      setOptions(question.options);
-      if (JSON.stringify(newOps) !== JSON.stringify(oldOps) && showResults) {
-        alert(
-          `New Options ${JSON.stringify(newOps)} | ${JSON.stringify(oldOps)}`
-        );
+
+      await setOptions(question.options);
+      if (JSON.stringify(newOps) !== JSON.stringify(oldOps)) {
         setShowResults(false);
       }
     };
@@ -57,7 +57,8 @@ export const Player = ({ Server, SessionCode }) => {
     return () => {
       Server.off("Question", updateQuestion);
     };
-  }, [Server, SessionCode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [Server, SessionCode, showResults]);
 
   return (
     <>
@@ -101,10 +102,10 @@ export const Player = ({ Server, SessionCode }) => {
           }
           <div className="w-full p-4 bg-slate-300 text-center flex">
             <div className="w-1/2 ">
-              <p>Players</p>
+              <p>{players} Players</p>
             </div>
             <div className="w-1/2">
-              <p>#28383</p>
+              <p>#{SessionCode}</p>
             </div>
           </div>
         </ResizablePanel>

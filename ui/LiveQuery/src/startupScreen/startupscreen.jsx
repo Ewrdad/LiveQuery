@@ -15,6 +15,7 @@ export const StartUpScreen = ({ Server, setSessionCode }) => {
   const [RoomCode, setRoomCode] = useState("");
 
   useEffect(() => {
+    // setSessionCode("");
     Server.on("SuccessJoined", async (message) => {
       if (message.status == 200) {
         console.log(message);
@@ -23,19 +24,14 @@ export const StartUpScreen = ({ Server, setSessionCode }) => {
       }
     });
 
-    Server.on("SeshCreated", (message) => {
+    Server.on("SeshCreated", async (message) => {
       if (message.status == 200) {
         console.log(message);
+        await setSessionCode(message.sessionID);
         navigate("/dashboard");
-        setSessionCode(message.sessionID);
       }
     });
-
-    return () => {
-      Server.off("SuccessJoined");
-      Server.off("SeshCreated");
-    };
-  }, []);
+  }, [Server, navigate, setSessionCode]);
 
   return (
     <Card className="w-full p-3 border-3-black shadow-md bg-slate-200 ">
