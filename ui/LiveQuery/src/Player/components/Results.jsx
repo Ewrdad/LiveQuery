@@ -8,10 +8,9 @@ import { Progress } from "@/components/ui/progress";
  * @returns {JSX.Element} Results component
  * @example <Results options={options} players={players} />
  *
- *
- *
  */
 export const Results = ({ options, players }) => {
+  //MARK: Return
   return (
     <div>
       {options.map((option, index) => (

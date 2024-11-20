@@ -1,6 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
+/**
+ * MARK: Vote
+ * @description The component that allows a player to vote
+ * @param {Array<Object>} options The options to vote on
+ * @param {Function} setShowResults The function to show the results
+ * @param {Object} Server The socket.io server connection
+ * @param {String} SessionCode The session code
+ */
 export const Vote = ({ options, setShowResults, Server, SessionCode }) => {
   return (
     <div className="w-full  text-xl">

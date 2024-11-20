@@ -19,9 +19,11 @@ import { useEffect, useState } from "react";
  *
  */
 export const StartUpScreen = ({ Server, setSessionCode }) => {
+  //MARK: useState
   const navigate = useNavigate();
   const [RoomCode, setRoomCode] = useState("");
 
+  //MARK: useEffect
   useEffect(() => {
     Server.on("SuccessJoined", async (message) => {
       if (message.status == 200) {
@@ -40,6 +42,7 @@ export const StartUpScreen = ({ Server, setSessionCode }) => {
     });
   }, [Server, navigate, setSessionCode]);
 
+  //MARK: Return
   return (
     <Card className="w-full p-3 border-3-black shadow-md bg-slate-200 ">
       <CardContent>
