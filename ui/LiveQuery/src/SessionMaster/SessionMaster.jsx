@@ -15,7 +15,14 @@ import { Button } from "@/components/ui/button";
  * MARK: SessionMaster
  * @description The main screen for the session master
  * @returns {JSX.Element} SessionMaster component
- * @example <SessionMaster />
+ * @example <SessionMaster SessionCode={SessionCode} Server={Server} />
+ * @param {String} SessionCode The session code
+ * @param {Object} Server The socket.io server connection
+ * @listens AllQuestions Updates questions for session master
+ * @listens Update Triggers a session update
+ * @emits GetQuestion Emits a request that forces an update of the current question
+ * @emits GetAllQuestion Emits a request that requests an update to questions
+ *
  */
 export const SessionMaster = ({ SessionCode, Server }) => {
   const [Questions, setQuestions] = useState([
@@ -42,8 +49,6 @@ export const SessionMaster = ({ SessionCode, Server }) => {
   });
 
   useEffect(() => {
-    Server.on("Question", (message) => console.log(message));
-
     Server.on("AllQuestions", (message) => {
       console.log(message);
 

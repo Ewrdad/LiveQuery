@@ -1,5 +1,14 @@
 import { Button } from "@/components/ui/button";
 
+/**
+ * MARK: Footer
+ * @description Displays votes and allows user to select a template
+ * @param {Object} Selected - The selected question
+ * @param {Function} setSelected - Function to set the selected question
+ * @returns Footer component
+ * @example <Footer Selected={Selected} setSelected={setSelected} />
+ *
+ */
 export const Footer = ({ Selected, setSelected }) => {
   const totalVotes = Selected.question.options.reduce(
     (acc, option) => acc + option.votes,
@@ -25,6 +34,9 @@ export const Footer = ({ Selected, setSelected }) => {
       <div className="bg-slate-400 w-full ">
         <h2>Templates</h2>
         <div className="flex align-middle justify-center">
+          {
+            // MARK: Story Points
+          }
           <Button
             className="m-1"
             onClick={() =>
@@ -68,6 +80,10 @@ export const Footer = ({ Selected, setSelected }) => {
           >
             Story Points(Fibonanci)
           </Button>
+
+          {
+            // MARK: 1-5 rank
+          }
           <Button
             className="m-1"
             onClick={() =>
@@ -89,6 +105,9 @@ export const Footer = ({ Selected, setSelected }) => {
             1-5 rank
           </Button>
 
+          {
+            // MARK: Strong Agree/Disagree
+          }
           <Button
             className="m-1"
             onClick={() =>
@@ -110,6 +129,9 @@ export const Footer = ({ Selected, setSelected }) => {
             Strong Agree/Disagree
           </Button>
 
+          {
+            // MARK: True/False
+          }
           <Button
             className="m-1"
             onClick={() =>
@@ -127,6 +149,10 @@ export const Footer = ({ Selected, setSelected }) => {
           >
             True/False
           </Button>
+
+          {
+            // MARK: Yes/No
+          }
           <Button
             className="m-1"
             onClick={() =>

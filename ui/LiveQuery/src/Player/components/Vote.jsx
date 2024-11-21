@@ -8,6 +8,9 @@ import { Separator } from "@/components/ui/separator";
  * @param {Function} setShowResults The function to show the results
  * @param {Object} Server The socket.io server connection
  * @param {String} SessionCode The session code
+ * @returns {React.Component} The vote component
+ * @example <Vote options={options} setShowResults={setShowResults} Server={Server} SessionCode={SessionCode} />
+ * @emit Vote - Casts a vote for a different option
  */
 export const Vote = ({ options, setShowResults, Server, SessionCode }) => {
   return (

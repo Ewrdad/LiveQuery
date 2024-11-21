@@ -4,8 +4,11 @@ import { Button } from "@/components/ui/button";
  * MARK: NewQuestion
  * @description A button for creating a new question
  * @returns {JSX.Element} NewQuestion component
- * @example <NewQuestion />
- * @param {function} setQuestions - A function to set the questions to new state
+ * @example <NewQuestion Server={Server} Questions={Questions} SessionCode={SessionCode} />
+ * @param {Object} Server The socket.io server connection
+ * @param {Array<Object>} Questions The questions in the session
+ * @param {String} SessionCode The session code
+ * @emits ReplaceQuestion Emits a request to replace a question. Used to add a new question
  */
 export const NewQuestion = ({ Server, Questions, SessionCode }) => {
   const createQuestion = async () => {

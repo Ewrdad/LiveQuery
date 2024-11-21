@@ -2,6 +2,20 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 
+/**
+ * MARK: Editor
+ * @description Editor for the selected question
+ * @param {Object} Selected - The selected question
+ * @param {Function} setSelected - Function to set the selected question
+ * @param {Array} Questions - Array of questions
+ * @param {Object} Server - The server object
+ * @param {String} SessionCode - The session
+ * @returns Editor component
+ * @example <Editor Selected={Selected} setSelected={setSelected} Questions={Questions} Server={Server} SessionCode={SessionCode} />
+ * @emits MakeActive - Emits to make the selected question active
+ * @emits ReplaceQuestion - Emits to replace the selected question with the current values in selected
+ * @emits GetAllQuestion - Emits to get all questions
+ */
 export const Editor = ({
   Selected,
   setSelected,
@@ -11,6 +25,9 @@ export const Editor = ({
 }) => {
   return (
     <div className="w-full h-full min-w-max ">
+      {
+        // MARK: Update and Make Active
+      }
       <Button
         className=" w-full  min-w-max "
         disabled={Selected.question.active}
@@ -30,6 +47,7 @@ export const Editor = ({
       >
         Make active
       </Button>
+
       <Button
         className=" w-full  min-w-max "
         disabled={
@@ -48,6 +66,10 @@ export const Editor = ({
       >
         Update
       </Button>
+
+      {
+        // MARK: Question Details
+      }
       <Textarea
         value={Selected.question.text}
         onChange={(event) => {

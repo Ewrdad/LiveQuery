@@ -3,6 +3,12 @@ import { Button } from "@/components/ui/button";
 /**
  * MARK: ExistingQuestion
  * @description A button for selecting an existing question
+ * @param {Object} Question The question to display
+ * @param {Number} index The index of the question in the array
+ * @param {Function} setSelected The function to set the selected question
+ * @param {Object} Selected The currently selected question
+ * @returns {JSX.Element} ExistingQuestion component
+ * @example <ExistingQuestion Question={Question} index={index} setSelected={setSelected} Selected={Selected} />
  */
 export const ExistingQuestion = ({
   Question,
@@ -18,7 +24,8 @@ export const ExistingQuestion = ({
       }}
     >
       {Question.text}
-      {Selected.index == index ? "🔴" : ""}
+      {Question.active ? "🟢" : "🔴"}
+      {Selected.index == index ? "⚫" : ""}
     </Button>
   );
 };

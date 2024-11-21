@@ -8,10 +8,11 @@ import { Editor } from "./Editor/Editor";
 
 /**
  * MARK: QuestionEditor
- * @description A way to edit questions
+ * @description A way to edit the selected questions
  *
- * @example <QuestionEditor />
+ * @example <QuestionEditor {...props} />
  * @returns {JSX.Element} QuestionEditor component
+ * @param {Object} props The props for the component
  */
 export const QuestionEditor = (props) => {
   return (
