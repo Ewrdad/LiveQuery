@@ -13,7 +13,7 @@ export const Results = ({ options, players }) => {
   //MARK: Return
   return (
     <div>
-      {options.map((option, index) => (
+      {(options || [{votes: 0,text: "Error"}]).map((option, index) => (
         <div key={index} className="flex">
           <div className="w-1/3 ">{option.text}</div>
           <div className="w-1/3 align-middle flex items-center ">

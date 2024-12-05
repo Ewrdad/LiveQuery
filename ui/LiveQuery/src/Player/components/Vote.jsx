@@ -15,7 +15,8 @@ import { Separator } from "@/components/ui/separator";
 export const Vote = ({ options, setShowResults, Server, SessionCode }) => {
   return (
     <div className="w-full  text-xl">
-      {options.map((option, index) => {
+      {JSON.stringify(options)}
+      {(options || [{text:"Error" , votes: 0}]).map((option, index) => {
         return (
           <div key={index}>
             <Separator

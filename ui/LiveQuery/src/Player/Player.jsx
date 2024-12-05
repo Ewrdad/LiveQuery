@@ -27,18 +27,49 @@ export const Player = ({ Server, SessionCode }) => {
   //MARK: useState
   const [showResults, setShowResults] = useState(false);
   const [options, setOptions] = useState([
-    {
-      text: "Option 1",
-      votes: 5,
-    },
-    {
-      text: "Option 2",
-      votes: 2,
-    },
+    
   ]);
   const [QuestionText, setQuestionText] = useState("Q1");
   const [players, setPlayers] = useState(10);
 
+  Server.on("Update", (message) => {
+    console.log("Update", message);
+    // alert(`Session ${SessionCode} has been updated`);
+    setPlayers(message.players);
+    Server.emit("GetQuestion", { sessionID: SessionCode });
+    Server.emit("GetAllQuestion", { sessionID: SessionCode });
+  });
+
+  const updateQuestion = (question) => {
+    console.log("Updated questions to ", question, SessionCode);
+    setQuestionText(question.text);
+    setPlayers(question.players);
+
+    setOptions((prevOptions) => {
+
+      const newOps = (question.options ?? []).map((option) => option.text) ?? [];
+      const oldOps = (prevOptions ?? []).map((option) => option.text) ?? [];
+      console.log("Opps comparison",JSON.stringify(newOps), JSON.stringify(oldOps));
+      console.log(JSON.stringify(newOps) !== JSON.stringify(oldOps));
+
+
+    if (JSON.stringify(newOps) !== JSON.stringify(oldOps)) {
+      console.log("Setting new options to ", question.options);
+      setShowResults(prevValue => false);
+      if (question.options) {
+        return question.options;
+      } 
+      ;
+    }
+      return prevOptions;
+    
+    });
+
+    
+  };
+
+  Server.on("Question", updateQuestion);
+  Server.on("QuestionUpdate", updateQuestion);
   //MARK: useEffect
   useEffect(() => {
     Server.on("Update", (message) => {
@@ -49,29 +80,13 @@ export const Player = ({ Server, SessionCode }) => {
       Server.emit("GetAllQuestion", { sessionID: SessionCode });
     });
 
-    const updateQuestion = async (question) => {
-      console.log("Updated questions to ", question, SessionCode);
-      setQuestionText(question.text);
-      setPlayers(question.players);
-      const newOps = question.options.map((option) => option.text);
-      const oldOps = options.map((option) => option.text);
-
-      await setOptions(question.options);
-      if (JSON.stringify(newOps) !== JSON.stringify(oldOps)) {
-        setShowResults(false);
-      }
-    };
-
-    Server.on("Question", updateQuestion);
-    Server.on("QuestionUpdate", updateQuestion);
-
     Server.emit("GetQuestion", { sessionID: SessionCode });
 
     return () => {
-      Server.off("Question", updateQuestion);
+      // Server.off("Question", updateQuestion);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Server, SessionCode, showResults]);
+  }, [Server, SessionCode, options]);
 
   //MARK: return
   return (
@@ -97,6 +112,7 @@ export const Player = ({ Server, SessionCode }) => {
             // MARK: Body
           }
           <div>
+            {JSON.stringify(showResults)}
             {showResults ? (
               <Results options={options} players={players} />
             ) : (

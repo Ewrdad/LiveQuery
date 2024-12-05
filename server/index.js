@@ -6,8 +6,21 @@ const io = require("socket.io")(http, {
 
 const session = {};
 
+let counter = 0;
+
 io.on("connection", (socket) => {
   console.log("a user connected");
+
+  socket.on("increment", (message) => {
+    
+    console.log("increment", message);
+    counter += message.amount;
+    socket.emit("counter", counter);
+    code = message.code ?? "default";
+    socket.join(`${code}`);
+    socket.to(`${code}`).emit("counter", counter);
+  });
+
 
   socket.on("Welcome", (message) => {
     console.log("Welcome", message);
@@ -49,17 +62,17 @@ io.on("connection", (socket) => {
         {
           text: "Question 1",
           options: [
-            { text: "Option a", votes: 3 },
-            { text: "Option c", votes: 4 },
+            { text: "Option a", votes: 0 },
+            { text: "Option c", votes: 0 },
           ],
           active: true,
         },
         {
           text: "Question 2",
           options: [
-            { text: "Option 1", votes: 4 },
-            { text: "Option 2", votes: 6 },
-            { text: "Option 3", votes: 2 },
+            { text: "Option 1", votes: 0 },
+            { text: "Option 2", votes: 0 },
+            { text: "Option 3", votes: 0 },
           ],
         },
       ],
@@ -80,6 +93,8 @@ io.on("connection", (socket) => {
       const question = session[`${message.sessionID}`].questions.filter(
         (question) => question.active
       )[0];
+      if(question.length >=2){ console.error("More than one question active WHAH WHA WHA");}
+
       console.info("returning these", question);
       question["players"] = session[`${message.sessionID}`].players;
       socket.to(`${message.sessionID}`).emit("Question", question);
@@ -107,6 +122,11 @@ io.on("connection", (socket) => {
       const question = session[`${message.SessionID}`].questions.filter(
         (question) => question.active
       )[0];
+
+      socket.to(`${message.sessionID}`).emit("Question", question);
+      socket.emit("Question", question);
+      socket.to(`${message.sessionID}`).emit("Update", session[`${message.sessionID}`]);
+
     } catch (e) {
       console.error(e);
     }
@@ -149,6 +169,9 @@ io.on("connection", (socket) => {
       socket
         .to(`${message.sessionID}`)
         .emit("Update", session[`${message.sessionID}`]);
+
+        socket.to(`${message.sessionID}`).emit("AllQuestions", { sessionID: `${message.sessionID}`, questions: session[`${message.sessionID}`].questions });
+        socket.to(`${message.sessionID}`).emit("Question", session[`${message.sessionID}`].questions[mes]);
     } catch (e) {
       console.error(e);
     }

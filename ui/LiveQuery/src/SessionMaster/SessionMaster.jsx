@@ -47,7 +47,12 @@ export const SessionMaster = ({ SessionCode, Server }) => {
     index: 0,
     question: Questions[0],
   });
-
+  
+  Server.on("Update", (message) => {
+    console.log("Update", message);
+    Server.emit("GetQuestion", { sessionID: SessionCode });
+    Server.emit("GetAllQuestion", { sessionID: SessionCode });
+  });
   useEffect(() => {
     Server.on("AllQuestions", (message) => {
       console.log(message);
@@ -77,11 +82,6 @@ export const SessionMaster = ({ SessionCode, Server }) => {
       });
     });
 
-    Server.on("Update", (message) => {
-      console.log("Update", message);
-      Server.emit("GetQuestion", { sessionID: SessionCode });
-      Server.emit("GetAllQuestion", { sessionID: SessionCode });
-    });
     Server.emit("GetQuestion", { sessionID: SessionCode });
 
     Server.emit("GetAllQuestion", { sessionID: SessionCode });
