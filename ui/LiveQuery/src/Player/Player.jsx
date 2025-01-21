@@ -49,12 +49,9 @@ export const Player = ({ Server, SessionCode }) => {
 
       const newOps = (question.options ?? []).map((option) => option.text) ?? [];
       const oldOps = (prevOptions ?? []).map((option) => option.text) ?? [];
-      console.log("Opps comparison",JSON.stringify(newOps), JSON.stringify(oldOps));
-      console.log(JSON.stringify(newOps) !== JSON.stringify(oldOps));
 
 
     if (JSON.stringify(newOps) !== JSON.stringify(oldOps)) {
-      console.log("Setting new options to ", question.options);
       setShowResults(prevValue => false);
       if (question.options) {
         return question.options;
@@ -74,7 +71,6 @@ export const Player = ({ Server, SessionCode }) => {
   useEffect(() => {
     Server.on("Update", (message) => {
       console.log("Update", message);
-      // alert(`Session ${SessionCode} has been updated`);
       setPlayers(message.players);
       Server.emit("GetQuestion", { sessionID: SessionCode });
       Server.emit("GetAllQuestion", { sessionID: SessionCode });

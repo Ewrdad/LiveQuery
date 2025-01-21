@@ -38,6 +38,11 @@ export const Editor = ({
             Question: Selected.question,
             index: Selected.index,
           });
+          Server.emit("ReplaceQuestion", {
+            sessionID: SessionCode,
+            question: Selected.question,
+            index: Selected.index,
+          });
           Server.emit("GetAllQuestion", { sessionID: SessionCode });
           setSelected((previousValue) => ({
             ...previousValue,

@@ -47,7 +47,6 @@ export const StartUpScreen = ({ Server, setSessionCode }) => {
     <Card className="w-full p-3 border-3-black shadow-md bg-slate-200 ">
       <CardContent>
         <br />
-
         <Input
           placeholder="Session ID"
           value={RoomCode}
@@ -67,7 +66,6 @@ export const StartUpScreen = ({ Server, setSessionCode }) => {
         </Button>
         <br />
         <p className="h-4" />
-
         <p>OR</p>
         <br />
         <Button
@@ -79,6 +77,7 @@ export const StartUpScreen = ({ Server, setSessionCode }) => {
         >
           Create Session
         </Button>
+        <h4 className="mt-8 text-3xl">🏳‍🌈 ❤ 🏳‍⚧</h4>
       </CardContent>
     </Card>
   );
