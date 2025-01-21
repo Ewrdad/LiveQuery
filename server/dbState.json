@@ -1,53 +1,40 @@
 {
-  "540657": {
-    "admin": "ahv4KPETlJ8bwZh3AAAJ",
-    "players": 1,
+  "986292": {
+    "admin": "mdlPODu0KluTYvVDAAAW",
+    "players": 0,
     "questions": [
       {
-        "text": "1-5 rank",
+        "text": "Question 1",
         "options": [
           {
-            "text": "1",
-            "votes": 1
-          },
-          {
-            "text": "2",
-            "votes": 1
-          },
-          {
-            "text": "3",
-            "votes": 1
-          },
-          {
-            "text": "4",
+            "text": "Option a",
             "votes": 0
           },
           {
-            "text": "5",
+            "text": "Option c",
             "votes": 0
           }
         ],
         "active": true,
-        "players": 1
+        "players": 0
       },
       {
-        "text": "Question 2ee",
+        "text": "Question 2",
         "options": [
           {
             "text": "Option 1",
-            "votes": 1
+            "votes": 0
           },
           {
             "text": "Option 2",
-            "votes": 1
+            "votes": 0
           },
           {
             "text": "Option 3",
             "votes": 0
           }
         ],
-        "active": false,
-        "players": 1
+        "active": false
       }
     ]
   }

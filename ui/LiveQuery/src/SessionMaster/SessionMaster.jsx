@@ -10,6 +10,7 @@ import { NewQuestion } from "./QuestionSelector/NewQuestion";
 import { ExistingQuestion } from "./QuestionSelector/ExistingQuestion";
 import { QuestionEditor } from "./QuestionEditor/QuestionEditor";
 import { Button } from "@/components/ui/button";
+import { DownloadButton } from "./Header/DownloadButton";
 
 /**
  * MARK: SessionMaster
@@ -97,7 +98,15 @@ export const SessionMaster = ({ SessionCode, Server }) => {
         <p>
           Session Code: #{SessionCode} | Players: {players}
         </p>
-        <Button className="m-1">Export results</Button>
+        <Button
+          className="m-1"
+          onClick={() => {
+            navigator.clipboard.writeText(JSON.stringify(Questions, null, 2));
+          }}
+        >
+          Copy Data
+        </Button>
+        <DownloadButton data={Questions} filename="questions.txt" />
       </div>
       <ResizablePanelGroup
         className="w-full h-full min-w-max "
