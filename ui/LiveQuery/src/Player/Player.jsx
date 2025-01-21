@@ -26,9 +26,7 @@ import {
 export const Player = ({ Server, SessionCode }) => {
   //MARK: useState
   const [showResults, setShowResults] = useState(false);
-  const [options, setOptions] = useState([
-    
-  ]);
+  const [options, setOptions] = useState([]);
   const [QuestionText, setQuestionText] = useState("Q1");
   const [players, setPlayers] = useState(10);
 
@@ -46,41 +44,28 @@ export const Player = ({ Server, SessionCode }) => {
     setPlayers(question.players);
 
     setOptions((prevOptions) => {
-
-      const newOps = (question.options ?? []).map((option) => option.text) ?? [];
+      const newOps =
+        (question.options ?? []).map((option) => option.text) ?? [];
       const oldOps = (prevOptions ?? []).map((option) => option.text) ?? [];
 
-
-    if (JSON.stringify(newOps) !== JSON.stringify(oldOps)) {
-      setShowResults(prevValue => false);
-      if (question.options) {
-        return question.options;
-      } 
-      ;
-    }
-      return prevOptions;
-    
+      if (JSON.stringify(newOps) !== JSON.stringify(oldOps)) {
+        setShowResults(() => false);
+      }
+      return question.options;
     });
-
-    
   };
 
   Server.on("Question", updateQuestion);
   Server.on("QuestionUpdate", updateQuestion);
-  //MARK: useEffect
-  useEffect(() => {
-    Server.on("Update", (message) => {
-      console.log("Update", message);
-      setPlayers(message.players);
-      Server.emit("GetQuestion", { sessionID: SessionCode });
-      Server.emit("GetAllQuestion", { sessionID: SessionCode });
-    });
+  Server.on("Update", (message) => {
+    setPlayers(message.players);
 
     Server.emit("GetQuestion", { sessionID: SessionCode });
-
-    return () => {
-      // Server.off("Question", updateQuestion);
-    };
+    Server.emit("GetAllQuestion", { sessionID: SessionCode });
+  });
+  //MARK: useEffect
+  useEffect(() => {
+    Server.emit("GetQuestion", { sessionID: SessionCode });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Server, SessionCode, options]);
 

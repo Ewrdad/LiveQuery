@@ -10,7 +10,6 @@ import { Player } from "./Player/Player";
 import { SessionMaster } from "./SessionMaster/SessionMaster";
 import { io } from "socket.io-client";
 import { useState } from "react";
-import { Counter } from "./Counter/Counter";
 
 /**
  * MARK: App

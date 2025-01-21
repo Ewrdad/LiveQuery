@@ -8,22 +8,39 @@ const session = {};
 
 let counter = 0;
 
+const fs = require("fs");
+
+/**
+ * @alias logDB
+ * @description Writes session data to file so that it can be analysed
+ */
+const logDB = () => {
+  try {
+    const jsonData = JSON.stringify(session, null, 2);
+
+    fs.writeFileSync("dbState.json", jsonData);
+  } catch (error) {
+    console.error("Error writing array to file:", error);
+  }
+};
+
 io.on("connection", (socket) => {
   console.log("a user connected");
 
   socket.on("increment", (message) => {
-    
     console.log("increment", message);
     counter += message.amount;
     socket.emit("counter", counter);
     code = message.code ?? "default";
     socket.join(`${code}`);
     socket.to(`${code}`).emit("counter", counter);
-  });
 
+    logDB();
+  });
 
   socket.on("Welcome", (message) => {
     console.log("Welcome", message);
+    logDB();
   });
 
   socket.on("JoinSession", async (message) => {
@@ -49,6 +66,7 @@ io.on("connection", (socket) => {
     } catch (e) {
       console.error(e);
     }
+    logDB();
   });
 
   socket.on("CreateSesh", (message) => {
@@ -74,12 +92,14 @@ io.on("connection", (socket) => {
             { text: "Option 2", votes: 0 },
             { text: "Option 3", votes: 0 },
           ],
+          active: false,
         },
       ],
     };
     socket.join(`${sessionID}`);
 
     socket.emit("SeshCreated", { status: 200, sessionID: `${sessionID}` });
+    logDB();
   });
 
   socket.on("GetQuestion", (message) => {
@@ -93,7 +113,9 @@ io.on("connection", (socket) => {
       const question = session[`${message.sessionID}`].questions.filter(
         (question) => question.active
       )[0];
-      if(question.length >=2){ console.error("More than one question active WHAH WHA WHA");}
+      if (question.length >= 2) {
+        console.error("More than one question active WHAH WHA WHA");
+      }
 
       console.info("returning these", question);
       question["players"] = session[`${message.sessionID}`].players;
@@ -102,6 +124,7 @@ io.on("connection", (socket) => {
     } catch (e) {
       console.error(e);
     }
+    logDB();
   });
 
   socket.on("MakeActive", (message) => {
@@ -111,25 +134,37 @@ io.on("connection", (socket) => {
       }
 
       console.log("MakeActive", message);
-      session[message.SessionID].questions.forEach((question) => {
-        question.active = false;
-      });
+
+      //set all active to false
       session[`${message.SessionID}`].questions.forEach((question, index) => {
-        if (index === message.index) {
-          question.active = true;
+        session[`${message.SessionID}`].questions[index].active = false;
+      });
+
+      logDB();
+
+      //set the selected question to active
+      session[`${message.SessionID}`].questions.forEach((question, index) => {
+        //push message of indexes and their types
+        if (index == message.index) {
+          session[`${message.SessionID}`].questions[index].active = true;
         }
       });
+      logDB();
+
+      //Send the updated question to all clients
       const question = session[`${message.SessionID}`].questions.filter(
         (question) => question.active
       )[0];
 
       socket.to(`${message.sessionID}`).emit("Question", question);
       socket.emit("Question", question);
-      socket.to(`${message.sessionID}`).emit("Update", session[`${message.sessionID}`]);
-
+      socket
+        .to(`${message.sessionID}`)
+        .emit("Update", session[`${message.sessionID}`]);
     } catch (e) {
       console.error(e);
     }
+    logDB();
   });
 
   socket.on("GetAllQuestion", (message) => {
@@ -149,6 +184,7 @@ io.on("connection", (socket) => {
     } catch (e) {
       console.error(e);
     }
+    logDB();
   });
 
   socket.on("Vote", (message) => {
@@ -170,11 +206,17 @@ io.on("connection", (socket) => {
         .to(`${message.sessionID}`)
         .emit("Update", session[`${message.sessionID}`]);
 
-        socket.to(`${message.sessionID}`).emit("AllQuestions", { sessionID: `${message.sessionID}`, questions: session[`${message.sessionID}`].questions });
-        socket.to(`${message.sessionID}`).emit("Question", session[`${message.sessionID}`].questions[mes]);
+      socket.to(`${message.sessionID}`).emit("AllQuestions", {
+        sessionID: `${message.sessionID}`,
+        questions: session[`${message.sessionID}`].questions,
+      });
+      socket
+        .to(`${message.sessionID}`)
+        .emit("Question", session[`${message.sessionID}`].questions[mes]);
     } catch (e) {
       console.error(e);
     }
+    logDB();
   });
 
   socket.on("ReplaceQuestion", (message) => {
@@ -192,6 +234,7 @@ io.on("connection", (socket) => {
     } catch (e) {
       console.error(e);
     }
+    logDB();
   });
 });
 

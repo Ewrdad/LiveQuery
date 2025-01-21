@@ -1,0 +1,42 @@
+{
+  "335077": {
+    "admin": "W6TZU63_r4NHKkCCAAAD",
+    "players": 1,
+    "questions": [
+      {
+        "text": "Question 1",
+        "options": [
+          {
+            "text": "Option a",
+            "votes": 0
+          },
+          {
+            "text": "Option c",
+            "votes": 1
+          }
+        ],
+        "active": true,
+        "players": 1
+      },
+      {
+        "text": "Question 2",
+        "options": [
+          {
+            "text": "Option 1",
+            "votes": 1
+          },
+          {
+            "text": "Option 2",
+            "votes": 0
+          },
+          {
+            "text": "Option 3",
+            "votes": 0
+          }
+        ],
+        "active": false,
+        "players": 1
+      }
+    ]
+  }
+}
