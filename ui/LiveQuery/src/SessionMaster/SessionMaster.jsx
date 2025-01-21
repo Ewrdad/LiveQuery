@@ -43,13 +43,16 @@ export const SessionMaster = ({ SessionCode, Server }) => {
       ],
     },
   ]);
+  const [players, setPlayers] = useState("Loading...");
+
   const [Selected, setSelected] = useState({
     index: 0,
     question: Questions[0],
   });
-  
+
   Server.on("Update", (message) => {
     console.log("Update", message);
+    setPlayers(message.players);
     Server.emit("GetQuestion", { sessionID: SessionCode });
     Server.emit("GetAllQuestion", { sessionID: SessionCode });
   });
@@ -91,7 +94,9 @@ export const SessionMaster = ({ SessionCode, Server }) => {
   return (
     <div className="w-screen h-screen min-w-max min-h-max align-left left-0 fixed top-0">
       <div className="bg-slate-500 w-full ">
-        <p>Session Code: #{SessionCode}</p>
+        <p>
+          Session Code: #{SessionCode} | Players: {players}
+        </p>
         <Button className="m-1">Export results</Button>
       </div>
       <ResizablePanelGroup

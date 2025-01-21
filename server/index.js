@@ -63,6 +63,9 @@ io.on("connection", (socket) => {
         sessionID: message.sessionID,
         status: 200,
       });
+      socket
+        .to(`${message.sessionID}`)
+        .emit("Update", session[`${message.sessionID}`]);
     } catch (e) {
       console.error(e);
     }
