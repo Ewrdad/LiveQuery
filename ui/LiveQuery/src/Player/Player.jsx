@@ -6,6 +6,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { toast } from "sonner";
 
 /**
  * MARK: Player
@@ -50,6 +51,7 @@ export const Player = ({ Server, SessionCode }) => {
 
       if (JSON.stringify(newOps) !== JSON.stringify(oldOps)) {
         setShowResults(() => false);
+        toast("New Question");
       }
       return question.options;
     });

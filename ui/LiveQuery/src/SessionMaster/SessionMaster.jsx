@@ -11,6 +11,7 @@ import { ExistingQuestion } from "./QuestionSelector/ExistingQuestion";
 import { QuestionEditor } from "./QuestionEditor/QuestionEditor";
 import { Button } from "@/components/ui/button";
 import { DownloadButton } from "./Header/DownloadButton";
+import { toast } from "sonner";
 
 /**
  * MARK: SessionMaster
@@ -89,6 +90,9 @@ export const SessionMaster = ({ SessionCode, Server }) => {
     Server.emit("GetQuestion", { sessionID: SessionCode });
 
     Server.emit("GetAllQuestion", { sessionID: SessionCode });
+
+    navigator.clipboard.writeText(SessionCode);
+    toast("Session code copied to clipboard");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Server, SessionCode]);
 
@@ -102,6 +106,7 @@ export const SessionMaster = ({ SessionCode, Server }) => {
           className="m-1"
           onClick={() => {
             navigator.clipboard.writeText(JSON.stringify(Questions, null, 2));
+            toast("Data copied to clipboard");
           }}
         >
           Copy Data
