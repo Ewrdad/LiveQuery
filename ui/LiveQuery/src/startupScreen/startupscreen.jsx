@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 /**
  * MARK: StartUpScreen
@@ -29,6 +30,7 @@ export const StartUpScreen = ({ Server, setSessionCode }) => {
       if (message.status == 200) {
         console.log(message);
         await setSessionCode(message.sessionID);
+        toast("Joined Session As Player");
         navigate("/player");
       }
     });
@@ -37,6 +39,7 @@ export const StartUpScreen = ({ Server, setSessionCode }) => {
       if (message.status == 200) {
         console.log(message);
         await setSessionCode(message.sessionID);
+        toast("Session Created");
         navigate("/dashboard");
       }
     });

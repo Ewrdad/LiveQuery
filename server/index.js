@@ -6,8 +6,6 @@ const io = require("socket.io")(http, {
 
 const session = {};
 
-let counter = 0;
-
 const fs = require("fs");
 
 /**
@@ -48,7 +46,7 @@ io.on("connection", (socket) => {
       if (session[`${message.sessionID}`] === undefined) {
         throw new Error("Session not found: JoinSession");
       }
-      console.log("JoinSession", message);
+      console.log("JoinSession", message, new Date().toLocaleTimeString());
       socket.join(`${message.sessionID}`);
       //Increment session player count
       session[`${message.sessionID}`]["players"] += 1;
@@ -107,7 +105,7 @@ io.on("connection", (socket) => {
 
   socket.on("GetQuestion", (message) => {
     try {
-      console.log("Get Message", message);
+      console.log("Get Message", message, new Date().toLocaleTimeString());
       if (session[`${message.sessionID}`] === undefined) {
         throw new Error("Session not found: GetQuestion");
       }
@@ -172,7 +170,7 @@ io.on("connection", (socket) => {
 
   socket.on("GetAllQuestion", (message) => {
     try {
-      console.log("GetAllQuestions", message);
+      console.log("GetAllQuestions", message, new Date().toLocaleTimeString());
       if (session[`${message.sessionID}`] === undefined) {
         throw new Error("Session not found  : GetAllQuestion");
       }

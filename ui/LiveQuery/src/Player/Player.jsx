@@ -57,14 +57,14 @@ export const Player = ({ Server, SessionCode }) => {
     });
   };
 
-  Server.on("Question", updateQuestion);
+  // Server.on("Question", updateQuestion);
   Server.on("QuestionUpdate", updateQuestion);
-  Server.on("Update", (message) => {
-    setPlayers(message.players);
+  // Server.on("Update", (message) => {
+  //   setPlayers(message.players);
 
-    Server.emit("GetQuestion", { sessionID: SessionCode });
-    Server.emit("GetAllQuestion", { sessionID: SessionCode });
-  });
+  //   Server.emit("GetQuestion", { sessionID: SessionCode });
+  //   Server.emit("GetAllQuestion", { sessionID: SessionCode });
+  // });
   //MARK: useEffect
   useEffect(() => {
     Server.emit("GetQuestion", { sessionID: SessionCode });

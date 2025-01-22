@@ -1,7 +1,7 @@
 {
-  "719940": {
-    "admin": "fyVo_f0dAUYjgu24AAAR",
-    "players": 0,
+  "514493": {
+    "admin": "Fre_7rVGxdLHVCHZAAAD",
+    "players": 1,
     "questions": [
       {
         "text": "Question 1",
@@ -15,8 +15,8 @@
             "votes": 0
           }
         ],
-        "active": true,
-        "players": 0
+        "active": false,
+        "players": 1
       },
       {
         "text": "Question 2",
@@ -34,7 +34,7 @@
             "votes": 0
           }
         ],
-        "active": false
+        "active": true
       }
     ]
   }
